@@ -2,32 +2,39 @@ const Registro = ()=> {
 
     return (
         <>
+        <h1>CREA TU CUENTA</h1>
+        <h2>Registra tus datos</h2>
         <form /* onSubmit={handleSubmit} */>
-          <label>Nombre:</label>
+          <label for="nombre">Nombre:</label>
           <input
             type="text"
             name="nombre"
-          />
-          <label>Apellido:</label>
+            id="nombre"
+          /><br></br>
+          <label for="apellido">Apellido:</label>
           <input
             type="text"
             name="apellido"
-          />
-          <label>E-mail:</label>
+            id="apellido"
+          /><br></br>
+          <label for="email">E-mail:</label>
           <input
             type="text"
             name="email"
-          />
-          <label>Contraseña:</label>
+            id="email"
+          /><br></br>
+          <label for="contraseña">Contraseña:</label>
           <input
             type="text"
             name="contraseña"
-          />
-          <label>Repita contraseña:</label>
+            id="contraseña"
+          /><br></br>
+          <label for="contraseña2">Repita contraseña:</label>
           <input
             type="text"
             name="contraseña2"
-          />
+            id="contraseña2"
+          /><br></br>
         <button type="submit">Registrar</button>
       </form>
       </>
