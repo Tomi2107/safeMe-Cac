@@ -1,10 +1,11 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 # cac-react-2024
 Codo a Codo React 2024
+
+# Proyecto SafeMe
+Aplicación para generar alertas de seguridad o salud.
+Las alertas se activan presionando un botón de la aplicación.
+Cada alerta tiene un mensaje y un contacto preconfigurado.
+Cuando se activa la alerta, se envía al contacto el mensaje asociado y la georeferencia actual.
+
+# Variables de entorno
+APP_PORT = puerto donde levanta la aplicación
