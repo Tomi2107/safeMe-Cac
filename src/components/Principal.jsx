@@ -1,5 +1,5 @@
 import { MainHeader } from "./MainHeader";
-import { MainFooter } from "./MainFooter";
+import { Footer } from "./Footer";
 
 export const Principal = () => {
   return (
@@ -11,7 +11,7 @@ export const Principal = () => {
           <button>Alerta Salud</button>
         </section>
       </main>
-      <MainFooter />
+      <Footer />
     </>
   );
 };

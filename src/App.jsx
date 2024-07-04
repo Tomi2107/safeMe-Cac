@@ -10,7 +10,8 @@ return (
         <Route path= "/login" element = "show login"/>
         <Route path= "/register" element = "show register"/>
         <Route path= "/contacts" element = "show contact grid"/>
-        <Route path= "/contact/:id" element = "create/edit contact"/>
+        <Route path= "/contact/:id" element = "edit contact"/>
+        <Route path= "/contact/create" element = "create contact"/>
         <Route path= "/alerts" element = "show alerts configuration"/>
         <Route path= "/profile" element = "show profile configuration"/>
       </Routes>
