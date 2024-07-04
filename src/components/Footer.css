@@ -1,0 +1,10 @@
+
+.footer {
+  padding: var(--spacing-68);
+}
+
+.footer__copy {
+  text-align: center;
+  font-size: var(--font-medium);
+  padding: var(--spacing-36);
+}
