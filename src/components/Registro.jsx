@@ -10,6 +10,7 @@ const Registro = () => {
   });
 
   const [errores, setErrores] = useState({});
+  const [registroExitoso, setRegistroExitoso] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +32,7 @@ const Registro = () => {
         contraseña: "",
         contraseña2: "",
       });
+      setRegistroExitoso(true);
     } else {
       setErrores(errores);
     }
@@ -62,7 +64,7 @@ const Registro = () => {
     <>
       <h1>CREA TU CUENTA</h1>
       <h2>Registra tus datos</h2>
-      <form /* onSubmit={handleSubmit} */>
+      <form>
         <label htmlFor="nombre">Nombre:</label>
         <input
           type="text"
@@ -121,8 +123,8 @@ const Registro = () => {
           <span style={{ color: "red" }}>{errores.contraseña2}</span>
         )}
         <br></br>
-        {/*         <input onClick={onSubmit} value="Registrar"/> */}
         <button onClick={onSubmit}>Registrar</button>
+        {registroExitoso && <p>Se ha creado un usuario</p>}
       </form>
     </>
   );
