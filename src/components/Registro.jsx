@@ -2,6 +2,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const mySwal = withReactContent(Swal)
 
 const schema = yup.object().shape({
   nombre: yup.string().trim().required('El nombre es requerido'),
@@ -18,7 +21,10 @@ const Registro = () => {
 
   const onSubmit = (data) => {
     console.log('Datos del formulario:', data);
-    alert('¡Registro exitoso!');
+    Swal.fire({
+      text: "Se ha creado un usuario",
+      icon: "success"
+    });
     reset();
   };
 
