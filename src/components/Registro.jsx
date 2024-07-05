@@ -4,6 +4,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import {MainHeader} from './MainHeader'
+import { Footer } from './Footer';
+import './Registro.css'
+
 const mySwal = withReactContent(Swal)
 
 const schema = yup.object().shape({
@@ -30,56 +34,41 @@ const Registro = () => {
 
   return (
     <>
+    <MainHeader/>
+    <div className="form-container">
       <h1>CREA TU CUENTA</h1>
       <h2>Registra tus datos</h2>
+      <br />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div className="form-group">
           <label htmlFor="nombre">Nombre:</label>
-          <input
-            type="text"
-            id="nombre"
-            {...register('nombre')}
-          />
+          <input type="text" id="nombre" {...register('nombre')} />
           {errors.nombre && <p>{errors.nombre.message}</p>}
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="apellido">Apellido:</label>
-          <input
-            type="text"
-            id="apellido"
-            {...register('apellido')}
-          />
+          <input type="text" id="apellido" {...register('apellido')} />
           {errors.apellido && <p>{errors.apellido.message}</p>}
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="email">E-mail:</label>
-          <input
-            type="email"
-            id="email"
-            {...register('email')}
-          />
+          <input type="email" id="email" {...register('email')} />
           {errors.email && <p>{errors.email.message}</p>}
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="contraseña">Contraseña:</label>
-          <input
-            type="password"
-            id="contraseña"
-            {...register('contraseña')}
-          />
+          <input type="password" id="contraseña" {...register('contraseña')} />
           {errors.contraseña && <p>{errors.contraseña.message}</p>}
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="contraseña2">Repita contraseña:</label>
-          <input
-            type="password"
-            id="contraseña2"
-            {...register('contraseña2')}
-          />
+          <input type="password" id="contraseña2" {...register('contraseña2')} />
           {errors.contraseña2 && <p>{errors.contraseña2.message}</p>}
         </div>
         <button type="submit">Registrar</button>
       </form>
+    </div>
+      <Footer/>
     </>
   );
 };
