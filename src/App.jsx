@@ -1,37 +1,26 @@
-import { useState } from 'react'
 /* import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg' */
 import './App.css'
 import Registro from './components/Registro'
+import { BrowserRouter, Routes, Route} from "react-router-dom"
+import { Principal } from "./components/Principal.jsx"
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-    <Registro/>
-{/*       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
-    </>
-  )
+return (
+    <BrowserRouter>
+      <Routes>
+        <Route path= "/" element = {<Principal/>}  />
+        <Route path= "/login" element = "show login"/>
+        <Route path= "/register" element = {<Registro/>}/>
+        <Route path= "/contacts" element = "show contact grid"/>
+        <Route path= "/contact/:id" element = "edit contact"/>
+        <Route path= "/contact/create" element = "create contact"/>
+        <Route path= "/alerts" element = "show alerts configuration"/>
+        <Route path= "/profile" element = "show profile configuration"/>
+      </Routes>
+    </BrowserRouter>
+)
 }
 
 export default App

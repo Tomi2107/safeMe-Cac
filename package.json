@@ -15,10 +15,14 @@
     "dotenv": "^16.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
     "react-hook-form": "^7.52.1",
     "sweetalert2": "^11.12.1",
     "sweetalert2-react-content": "^5.0.7",
     "yup": "^1.4.0"
+=======
+    "react-router-dom": "^6.24.1"
+>>>>>>> 1a03449fa9ff5665d724bc15ea6191e8779bf5ec
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

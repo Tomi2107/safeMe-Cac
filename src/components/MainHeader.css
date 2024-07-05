@@ -1,0 +1,23 @@
+
+header {
+  /* background-color: var(--dark-bg-solid); */
+  padding: var(--spacing-28);
+}
+
+.navbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar__logo{
+  max-width: 300px;
+}
+
+.navbar__menu{
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-20);
+  padding: var(--spacing-36);
+}
+
