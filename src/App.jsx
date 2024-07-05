@@ -1,3 +1,6 @@
+/* import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg' */
+import Registro from './components/Registro'
 import { BrowserRouter, Routes, Route} from "react-router-dom"
 import { Principal } from "./components/Principal.jsx"
 
@@ -8,7 +11,7 @@ return (
       <Routes>
         <Route path= "/" element = {<Principal/>}  />
         <Route path= "/login" element = "show login"/>
-        <Route path= "/register" element = "show register"/>
+        <Route path= "/register" element = {<Registro/>}/>
         <Route path= "/contacts" element = "show contact grid"/>
         <Route path= "/contact/:id" element = "edit contact"/>
         <Route path= "/contact/create" element = "create contact"/>
