@@ -1,3 +1,5 @@
+@import url('../index.css');
+
 .navbar__menu {
     display: none;
 }
@@ -7,6 +9,7 @@
     align-items: center;
     margin: 20px;
     text-align: center;
+    font-family: var(--alternative-font);
   }
   
   form {
