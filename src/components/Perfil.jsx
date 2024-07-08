@@ -8,11 +8,7 @@ import withReactContent from "sweetalert2-react-content";
 const mySwal = withReactContent(Swal)
 
 export const Perfil = () => {
-
-  const {
-    handleSubmit,
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = (data) => {
     console.log("Datos del formulario:", data);
@@ -30,12 +26,14 @@ export const Perfil = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1>PERFIL</h1>
           <h2>Completa tus datos</h2>
-          <label htmlFor="nombre">Documento:</label>
-          <input type="text" id="documento" />
+          <label htmlFor="documento">Documento:</label>
+          <input type="text" id="documento" {...register("documento")} />
+          
           <label htmlFor="fechaNacimiento">Fecha de nacimiento:</label>
-          <input type="date" id="fechaNacimiento" />
+          <input type="date" id="fechaNacimiento" {...register("fechaNacimiento")} />
+          
           <label htmlFor="tipoSangre">Tipo de sangre:</label>
-          <select id="tipoSangre" name="tipoSangre">
+          <select id="tipoSangre" {...register("tipoSangre")}>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
             <option value="B+">B+</option>
@@ -45,12 +43,16 @@ export const Perfil = () => {
             <option value="O+">O+</option>
             <option value="O-">O-</option>
           </select>
+          
           <label htmlFor="enfermedades">Enfermedades:</label>
-          <input type="text" id="enfermedades" />
+          <input type="text" id="enfermedades" {...register("enfermedades")} />
+          
           <label htmlFor="alergias">Alergias:</label>
-          <input type="text" id="alergias" />
+          <input type="text" id="alergias" {...register("alergias")} />
+          
           <label htmlFor="notas">Otras notas médicas:</label>
-          <textarea type="text" id="notas" />
+          <textarea id="notas" {...register("notas")} />
+          
           <button type="submit">Completar</button>
         </form>
       </div>
