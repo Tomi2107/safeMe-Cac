@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -6,69 +6,90 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import {MainHeader} from './MainHeader'
 import { Footer } from './Footer';
-import './Registro.css'
 
-const mySwal = withReactContent(Swal)
+import { useNavigate } from "react-router-dom"
+import { collection, doc } from 'firebase/firestore';
+import { db } from '../firebaseConfig/firebase';
+import { setDoc } from 'firebase/firestore'; // Importo setDoc
+import { useAuth } from "../context/authContext";
+import './Registro.css';
 
-const schema = yup.object().shape({
-  nombre: yup.string().trim().required('El nombre es requerido'),
-  apellido: yup.string().trim().required('El apellido es requerido'),
-  email: yup.string().trim().email('El email no es válido').required('El email es requerido'),
-  contraseña: yup.string().trim().required('La contraseña es requerida'),
-  contraseña2: yup.string().oneOf([yup.ref('contraseña'), null], 'Las contraseñas no coinciden').required('Debe repetir la contraseña')
-});
+export const Registro = () => {
+  const auth = useAuth();
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [email, setEmail] = useState('');
+  const [contraseña, setContraseña] = useState('');
+  const [contraseña2, setContraseña2] = useState('');
+  const navigate = useNavigate();
 
-const Registro = () => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
-    resolver: yupResolver(schema)
-  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const onSubmit = (data) => {
-    console.log('Datos del formulario:', data);
-    Swal.fire({
-      text: "Se ha creado un usuario",
-      icon: "success"
-    });
-    reset();
+    // Validación básica de contraseña
+    if (contraseña !== contraseña2) {
+      alert('Las contraseñas no coinciden.');
+      return;
+    }
+
+    try {
+      const response = await auth.register(email, contraseña); // Uso auth desde context
+      console.log(response); 
+
+      // Obtengo el nuevo user UID 
+      const userId = response.user.uid;
+
+      // Creo un documento de usuario en  Firestore 
+      if (userId) {
+        const userRef = doc(collection(db, 'usuarios'), userId);
+        await setDoc(userRef, {
+          nombre,
+          apellido,
+          email,
+        });
+      }
+
+      alert("Usuario registrado con éxito");
+      navigate('/'); // Redirijo si el registro fue exitoso.
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert('Error al registrar usuario: ' + error.message);
+    }
   };
+
 
   return (
     <>
-    <MainHeader/>
-    <div className="form-container">
-      <h1>CREA TU CUENTA</h1>
-      <h2>Registra tus datos</h2>
-      <br />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
-          <label htmlFor="nombre">Nombre:</label>
-          <input type="text" id="nombre" {...register('nombre')} />
-          {errors.nombre && <p>{errors.nombre.message}</p>}
-        </div>
-        <div className="form-group">
-          <label htmlFor="apellido">Apellido:</label>
-          <input type="text" id="apellido" {...register('apellido')} />
-          {errors.apellido && <p>{errors.apellido.message}</p>}
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">E-mail:</label>
-          <input type="email" id="email" {...register('email')} />
-          {errors.email && <p>{errors.email.message}</p>}
-        </div>
-        <div className="form-group">
-          <label htmlFor="contraseña">Contraseña:</label>
-          <input type="password" id="contraseña" {...register('contraseña')} />
-          {errors.contraseña && <p>{errors.contraseña.message}</p>}
-        </div>
-        <div className="form-group">
-          <label htmlFor="contraseña2">Repita contraseña:</label>
-          <input type="password" id="contraseña2" {...register('contraseña2')} />
-          {errors.contraseña2 && <p>{errors.contraseña2.message}</p>}
-        </div>
-        <button type="submit">Registrar</button>
-      </form>
-    </div>
-      <Footer/>
+      <MainHeader />
+      <div className="form-container">
+        <h1>CREA TU CUENTA</h1>
+        <h2>Registra tus datos</h2>
+        <br />
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="nombre">Nombre:</label>
+            <input type="text" id="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="apellido">Apellido:</label>
+            <input type="text" id="apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">E-mail:</label>
+            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" value={contraseña} onChange={(e) => setContraseña(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="contraseña2">Repita contraseña:</label>
+            <input type="password" id="contraseña2" value={contraseña2} onChange={(e) => setContraseña2(e.target.value)} required />
+          </div>
+          <button type="submit">Registrar</button>
+        </form>
+      </div>
+      <Footer />
     </>
   );
 };

@@ -1,8 +1,27 @@
 import "./MainHeader.css"
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/authContext";
 
 export const MainHeader = () => {
+  
+  const navigate = useNavigate();
+  const auth = useAuth();
+
+  const handleLogout = () => {
+    try {
+      auth.logout()
+      navigate('/login'); // Redirect to the home page or desired route after logout
+    } catch (error) {
+      console.error('Error logging out:', error);
+      alert('Error al cerrar sesión: ' + error.message);
+    }
+  };
+
   return (
     <header>
       <div className="container navbar">
@@ -22,13 +41,18 @@ export const MainHeader = () => {
           </li>
           <li>
             <Link to="/contacts">
-              <img src="./src/assets/groups48.svg" alt="" />
+              <img src="./src/assets/groups48.svg" alt="">
+                <button>Contacts</button>
+              </img>
             </Link>
           </li>
           <li>
             <Link to="/alerts">
               <img src="./src/assets/settings48.svg" alt="" />
             </Link>
+          </li>
+          <li>
+            <button onClick={()=>handleLogout()} className="btn brn-primary">Cerrar Sesión</button>
           </li>
         </ul>
       </div>
