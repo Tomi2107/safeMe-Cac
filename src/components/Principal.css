@@ -1,0 +1,14 @@
+.principal__buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.principal__button {
+  display: block;
+  width: 25%;
+  border_radius: 50%;
+  border: 1px solid red;
+  margin-top: var(--spacing-36);
+  margin-bottom: var(--spacing-36);
+}
