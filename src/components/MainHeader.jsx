@@ -41,9 +41,7 @@ export const MainHeader = () => {
           </li>
           <li>
             <Link to="/contacts">
-              <img src="./src/assets/groups48.svg" alt="">
-                <button>Contacts</button>
-              </img>
+              <img src="./src/assets/groups48.svg" alt="" />
             </Link>
           </li>
           <li>

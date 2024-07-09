@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import './App.css'
 import { BrowserRouter, Routes, Route} from "react-router-dom"
 import { Principal } from "./components/Principal"
 import {Login} from "./components/Login"
