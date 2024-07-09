@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import {MainHeader} from './MainHeader'
 import { Footer } from './Footer';
+
 import { useNavigate } from "react-router-dom"
 import { collection, doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig/firebase';
@@ -89,3 +93,5 @@ export const Registro = () => {
     </>
   );
 };
+
+export default Registro;

@@ -1,68 +1,97 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/*======================================================== IMPORTACIONES ========================================================*/
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* importación de fonts de google */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;900&family=Raleway:wght@100;300;400;500;600;700;900&display=swap');
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/*======================================================== NORMALIZACION ========================================================*/
+
+:root{
+  /*Palette*/
+  --primary-solid: #FF3333;
+  --primary-900: rgba(255, 51, 51,0.9);
+  --primary-500: rgba(255, 51, 51,0.5);
+  --primary-300: rgba(255, 51, 51,0.3);
+
+  --secundary-solid: #1D84B5;
+  --secundary-900: rgba(29, 132, 181,0.9);
+  --secundary-500: rgba(29, 132, 181,0.5);
+  --secundary-300: rgba(29, 132, 181,0.3);
+
+  --tertiary-solid: #FF1654;
+  --tertiary-900: rgba(255, 22, 84,0.9);
+  --tertiary-500: rgba(255, 22, 84,0.5);
+  --tertiary-300: rgba(255, 22, 84,0.3);
+
+  --dark-solid: #1F1F1F;
+  --dark-900: rgba(31, 31, 31, 0.9);
+  --dark-500: rgba(31, 31, 31, 0.5);
+  --dark-300: rgba(31, 31, 31, 0.3);
+
+  --dark-bg-solid: #30343F;
+  --light-bg-solid: #FAFAFF;
+  --light-font-solid: #ffffff;
+
+  /*Typography*/
+  --base-font: 'Inter', sans-serif;
+  --alternative-font: 'Raleway', sans-serif;
+
+  /*Font-sizes*/
+  --font-display: 4.6em;
+  --font-big: 4.2em;
+  --font-junbo: 3.8em;
+  --font-xlarge: 3em;
+  --font-large: 2.4em;
+  --font-medium: 1.8em;
+  --font-small: 1.6em;
+  --font-xsmal: 1.4em;
+
+  /*Spacings*/
+  --spacing-128: 12.8rem;
+  --spacing-68: 6.8rem;
+  --spacing-36: 3.6rem;
+  --spacing-28: 2.8rem;
+  --spacing-24: 2.4rem;
+  --spacing-20: 2rem;
+  --spacing-16: 1.6rem;
+  --spacing-12: 1.2rem;
+  --spacing-8: 0.8rem;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+*,
+*::before,
+*::after{
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+  box-sizing: border-box; /*va determinar comportamiento de margenes y rellenos de los elementos*/
+}
+html{
+  font-family: var(--base-font);
+  font-size: 62.5%;
+  color: var(--dark-solid)
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+a{
+  text-decoration: none;
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+  color: inherit;    
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+header,footer{
+  font-family: var(--alternative-font);
+  color: var(--light-font-solid);
+  background-color: var(--dark-bg-solid);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+ul, ol{
+  list-style-type: none;
+}
+p{
+  font-size: 1.8em;
+}
+img{
+  width: 100%;
+}
+
+.container{
+  max-width: 1200px;
+  margin: 0 auto;
 }

@@ -22,8 +22,6 @@ export const MainHeader = () => {
     }
   };
 
-  
-
   return (
     <header>
       <div className="container navbar">
@@ -43,8 +41,9 @@ export const MainHeader = () => {
           </li>
           <li>
             <Link to="/contacts">
-              <button>Contacts</button>
-              <img src="./src/assets/groups48.svg" alt="" />
+              <img src="./src/assets/groups48.svg" alt="">
+                <button>Contacts</button>
+              </img>
             </Link>
           </li>
           <li>
