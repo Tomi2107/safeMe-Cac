@@ -1,8 +1,4 @@
-@import url('../index.css');
 
-.navbar__menu {
-    display: none;
-}
 .form-container {
     display: flex;
     flex-direction: column;
