@@ -6,6 +6,7 @@ import { Contactos } from "./components/Contactos"
 import { Create } from "./components/Create"
 import { Perfil } from './components/Perfil.jsx'
 import { Edit } from "./components/Edit.jsx"
+import { Alerts} from "./components/Alerts.jsx"
 
 import { AuthProvider } from './context/authContext'
 
@@ -21,7 +22,7 @@ return (
         <Route path= "/contacts" element = {<Contactos/>}/>
         <Route path= "/edit/:id" element = {<Edit/>}/>
         <Route path= "/create" element = {<Create/>}/>
-        <Route path= "/alerts" element = "show alerts configuration"/>
+        <Route path= "/alerts" element = {<Alerts/>}/>
         <Route path= "/profile" element = {<Perfil/>}/>
       </Routes>
     </BrowserRouter>

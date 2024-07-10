@@ -11,7 +11,7 @@ export const MainHeader = () => {
   const handleLogout = () => {
     try {
       auth.logout();
-      navigate("/login"); // Redirect to the home page or desired route after logout
+      navigate("/login"); // Redireccionar al componente Login después del cierre de sesión
     } catch (error) {
       console.error("Error logging out:", error);
       alert("Error al cerrar sesión: " + error.message);
@@ -21,13 +21,13 @@ export const MainHeader = () => {
   return (
     <header>
       <div className="container navbar">
-        {/* Logo SafeMe - Always displayed */}
+        {/* Logo SafeMe */}
         <Link to="/">
           <img className="navbar__logo" src="./src/assets/SafeMe.png" alt="" />
         </Link>
 
-        {/* Conditional links based on login status */}
-        {auth.user ? ( // If user is logged in
+        {/* Links condicionales basados en el estado de login */}
+        {auth.user ? ( // Si el usuario está logueado
           <ul className="navbar__menu">
             <li>
               <Link to="/profile">
@@ -50,7 +50,7 @@ export const MainHeader = () => {
               </button>
             </li>
           </ul>
-        ) : ( // If user is not logged in
+        ) : ( // Si el usuario no está logueado
           <ul className="navbar__menu">
             <li>
               <Link to="/login">
