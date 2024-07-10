@@ -1,107 +1,122 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth"; // Import Auth methods
-import { db } from "../firebaseConfig/firebase"; 
-import { MainHeader } from "./MainHeader";
-import { Footer } from "./Footer";
-import './Create.css'
+import { db } from "../firebaseConfig/firebase";
+import { useAuth } from "../context/authContext"; 
+import Swal from 'sweetalert2'; 
+import { MainHeader } from "./MainHeader"
+import { Footer} from "./Footer"
 
 export const Create = () => {
-  //Estados para guardar los datos del contacto
+  // Estados para guardar los datos del contacto
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [usuarioId, setUsuarioId] = useState(""); // For logged-in user ID
 
   // Función de redirección
   const navigate = useNavigate();
 
-  // Toma la instacia de crear
-  const auth = getAuth();
+  // Obtener el estado de usuario logueado
+  const { user } = useAuth();
 
   // Función para crear contacto
   const createContacto = async (e) => {
     e.preventDefault();
 
-    // toma el ID del usuario logueado
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUsuarioId(user.uid);
-      }
-    });
+    // Verificar si hay un usuario logueado
+    if (!user) {
+      console.error("No hay usuario logueado, no se puede crear contacto");
+      return; // Evitar ejecución si no hay usuario
+    }
 
-    // Agrega nuevo contacto a la colección "contactos" 
-    await addDoc(collection(db, "contactos"), {
+    // Obtener el ID del usuario logueado
+    const currentUserId = user.uid;
+
+    // Crear el documento de contacto con referencia al usuario
+    const contactRef = await addDoc(collection(db, "contactos"), {
       nombre: nombre,
       apellido: apellido,
       email: email,
       telefono: telefono,
-      usuarioId: usuarioId, // Referencia al usuario logueado
+      usuarioId: currentUserId,
     });
 
-    // Redirige al componente Contactos
-    navigate("/contactos");
+    // Mostrar SweetAlert2 de éxito
+    Swal.fire({
+      title: '¡Contacto creado!',
+      text: 'El contacto se ha creado correctamente.',
+      icon: 'success',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Aceptar'
+    }).then(() => {
+      // Redirigir al componente Contactos
+      navigate("/contacts");
+    });
   };
 
   return (
     <>
     <MainHeader/>
     <div className="container">
-      <div className="row">
-        <div className="col">
-          <h1>Crear Contacto</h1>
-          <form onSubmit={createContacto}>
-            <div className="mb-3">
-              <label className="form-label">Nombre</label>
-              <input
-                type="text"
-                value={nombre}
-                onChange={(event) => setNombre(event.target.value)}
-                className="form-control"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Apellido</label>
-              <input
-                type="text"
-                value={apellido}
-                onChange={(event) => setApellido(event.target.value)}
-                className="form-control"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                className="form-control"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Teléfono</label>
-              <input
-                type="tel"
-                value={telefono}
-                onChange={(event) => setTelefono(event.target.value)}
-                className="form-control"
-              />
-            </div>
-
-            <button type="submit" className="btn btn-primary">Crear Contacto</button>
-            <Link to="/contactos">
-              <button className="btn btn-danger">CANCELAR</button>
-            </Link>
-          </form>
+      <h1>Crear contacto</h1>
+      <form onSubmit={createContacto}>
+        <div className="mb-3">
+          <label htmlFor="nombre" className="form-label">Nombre:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            required
+          />
         </div>
-      </div>
+
+        <div className="mb-3">
+          <label htmlFor="apellido" className="form-label">Apellido:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="apellido"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email:</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="telefono" className="form-label">Teléfono:</label>
+          <input
+            type="tel"
+            className="form-control"
+            id="telefono"
+            value={telefono}
+            onChange={(e) => setTelefono(e.target.value)}
+            required
+          />
+        </div>
+
+        <button type="submit" className="btn btn-primary">Crear</button>
+      </form>
+      <Link to="/contacts">
+                <button className="btn btn-danger">CANCELAR</button>
+      </Link>
     </div>
     <Footer/>
     </>
   );
 };
+

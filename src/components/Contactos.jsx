@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Table, Button } from 'react-bootstrap'; // Importo Bootstrap components
 import Swal from 'sweetalert2'; // Importo SweetAlert2
-import { getDocs, collection, where, query } from 'firebase/firestore'; // Importo Firestore methods
-import { useAuth } from '../context/authContext'; // Import useAuth hook
+import { getDocs, collection, where, query, doc, deleteDoc } from 'firebase/firestore'; // Importo Firestore methods
+import { useAuth } from '../context/authContext'; 
 import { db } from "../firebaseConfig/firebase";
 import { MainHeader } from './MainHeader';
 import { Footer } from "./Footer";
@@ -11,17 +11,14 @@ import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
 
 export const Contactos = () => {
-  const [contacts, setContacts] = useState([]); // List of contacts
+  const [contacts, setContacts] = useState([]); // Lista de contactos
   const auth = useAuth(); // Use the useAuth hook to get the context
-  const loggedInUserId = auth.user?.uid; // Access the user ID from the context
-
-  const usuariosCollection = collection(db, 'usuarios');
+  const loggedInUserId = auth.user?.uid; // Acceso al user ID desde el authContext
 
   // Función para obtener los contactos
   const getContacts = async () => {
-    // Filtro los contactos en base al ID del usuario logueado
     if (loggedInUserId) {
-      const q = query(collection(usuariosCollection, 'contactos'), where('usuarioId', '==', loggedInUserId));
+      const q = query(collection(db, 'contactos'), where('usuarioId', '==', loggedInUserId));
       const data = await getDocs(q);
       setContacts(
         data.docs.map((doc) => ({
@@ -30,16 +27,30 @@ export const Contactos = () => {
         }))
       );
     } else {
-      // Handle case where no user is logged in (optional)
       console.log("No user logged in, cannot fetch contacts");
-      setContacts([]); // Clear contacts if no user
+      setContacts([]); // Limpia los contacto si no hay usuario logueado
     }
   };
 
   // Función para eliminar un contacto
   const deleteContact = async (id) => {
-    const contactDoc = doc(collection(usuariosCollection, 'contactos'), id);
-    await deleteDoc(contactDoc);
+    try {
+      const contactDoc = doc(collection(db, 'contactos'), id);
+      await deleteDoc(contactDoc);
+      Swal.fire({
+        title: '¡Contacto eliminado!',
+        text: '',
+        icon: 'success',
+      });
+      getContacts(); // Refresca la lista de contactos despues de borrar 
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+      Swal.fire({
+        title: 'Error al eliminar contacto',
+        text: error.message,
+        icon: 'error',
+      });
+    }
   };
 
   // Consulta de borrado de contacto con un alerta de Sweetalert2
@@ -56,11 +67,6 @@ export const Contactos = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         deleteContact(id);
-        Swal.fire({
-          title: '¡Contacto eliminado!',
-          text: '',
-          icon: 'success',
-        });
       }
     });
   };
@@ -81,17 +87,8 @@ export const Contactos = () => {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    try {
-      auth.logout()
-      navigate('/login'); // Redirect to the home page or desired route after logout
-    } catch (error) {
-      console.error('Error logging out:', error);
-      alert('Error al cerrar sesión: ' + error.message);
-    }
-  };
-
-
+  
+         
   return (
     <>
       <MainHeader />
@@ -106,6 +103,7 @@ export const Contactos = () => {
           <thead>
             <tr>
               <th>Nombre</th>
+              <th>Apellido</th>
               <th>Email</th>
               <th>Teléfono</th>
               <th>Acciones</th>
@@ -115,6 +113,7 @@ export const Contactos = () => {
             {contacts.map((contacto) => (
               <tr key={contacto.id}>
                 <td>{contacto.nombre}</td>
+                <td>{contacto.apellido}</td>
                 <td>{contacto.email}</td>
                 <td>{contacto.telefono}</td>
                 <td>
@@ -130,7 +129,6 @@ export const Contactos = () => {
               </tr>
             ))}
           </tbody>
-          <button onClick={()=>handleLogout()} className="btn brn-primary">Cerrar Sesión</button>
         </Table>
       </div>
       <Footer />
