@@ -1,0 +1,38 @@
+.contactos-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: var(--alternative-font);
+  }
+  
+  .contactos-table th,
+  .contactos-table td {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .contactos-table th {
+    background-color: #f8f9fa; /* Color de fondo para las cabeceras */
+  }
+  
+  .contactos-table td {
+    vertical-align: middle; /* Centrar verticalmente */
+  }
+  
+  .contactos-table .acciones {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .add-contact-icon, .edit-contact-icon, .delete-contact-icon {
+    width: 24px; /* Ajusta el tamaño según sea necesario */
+    height: 24px;
+    cursor: pointer;
+  }
+
+  .contactos-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }

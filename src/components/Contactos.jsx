@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Table, Button } from 'react-bootstrap'; // Importo Bootstrap components
-import Swal from 'sweetalert2'; // Importo SweetAlert2
-import { getDocs, collection, where, query, doc, deleteDoc } from 'firebase/firestore'; // Importo Firestore methods
-import { useAuth } from '../context/authContext'; 
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Table, Button } from "react-bootstrap"; // Importo Bootstrap components
+import Swal from "sweetalert2"; // Importo SweetAlert2
+import {
+  getDocs,
+  collection,
+  where,
+  query,
+  doc,
+  deleteDoc,
+} from "firebase/firestore"; // Importo Firestore methods
+import { useAuth } from "../context/authContext";
 import { db } from "../firebaseConfig/firebase";
-import { MainHeader } from './MainHeader';
+import { MainHeader } from "./MainHeader";
 import { Footer } from "./Footer";
-import { onAuthStateChanged, getAuth } from 'firebase/auth';
-
+import { onAuthStateChanged, getAuth } from "firebase/auth";
+import "./Contactos.css";
 
 export const Contactos = () => {
   const [contacts, setContacts] = useState([]); // Lista de contactos
@@ -18,7 +25,10 @@ export const Contactos = () => {
   // Función para obtener los contactos
   const getContacts = async () => {
     if (loggedInUserId) {
-      const q = query(collection(db, 'contactos'), where('usuarioId', '==', loggedInUserId));
+      const q = query(
+        collection(db, "contactos"),
+        where("usuarioId", "==", loggedInUserId)
+      );
       const data = await getDocs(q);
       setContacts(
         data.docs.map((doc) => ({
@@ -35,20 +45,20 @@ export const Contactos = () => {
   // Función para eliminar un contacto
   const deleteContact = async (id) => {
     try {
-      const contactDoc = doc(collection(db, 'contactos'), id);
+      const contactDoc = doc(collection(db, "contactos"), id);
       await deleteDoc(contactDoc);
       Swal.fire({
-        title: '¡Contacto eliminado!',
-        text: '',
-        icon: 'success',
+        title: "¡Contacto eliminado!",
+        text: "",
+        icon: "success",
       });
-      getContacts(); // Refresca la lista de contactos despues de borrar 
+      getContacts(); // Refresca la lista de contactos despues de borrar
     } catch (error) {
       console.error("Error deleting contact:", error);
       Swal.fire({
-        title: 'Error al eliminar contacto',
+        title: "Error al eliminar contacto",
         text: error.message,
-        icon: 'error',
+        icon: "error",
       });
     }
   };
@@ -56,14 +66,14 @@ export const Contactos = () => {
   // Consulta de borrado de contacto con un alerta de Sweetalert2
   const confirmDelete = (id) => {
     Swal.fire({
-      title: '¿Estás seguro de eliminar este contacto?',
-      text: 'Esta acción no se puede deshacer.',
-      icon: 'warning',
+      title: "¿Estás seguro de eliminar este contacto?",
+      text: "Esta acción no se puede deshacer.",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteContact(id);
@@ -87,26 +97,27 @@ export const Contactos = () => {
 
   const navigate = useNavigate();
 
-  
-         
   return (
     <>
       <MainHeader />
-      <div className="Contactos">
-        <h1>Mis Contactos</h1>
-        <Link to="/create">
-          <Button variant="primary" className="mb-3">
-            Crear Contacto
-          </Button>
-        </Link>
-        <Table striped bordered hover>
+      <div className="contactos-container">
+        <h1 className="contactos-header">CONTACTOS</h1>
+        <Table striped bordered hover className="contactos-table">
           <thead>
             <tr>
               <th>Nombre</th>
               <th>Apellido</th>
               <th>Email</th>
               <th>Teléfono</th>
-              <th>Acciones</th>
+              <th>
+                <Link to="/create">
+                  <img
+                    src="/add.png"
+                    className="add-contact-icon"
+                    alt="Crear Contacto"
+                  />
+                </Link>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -116,15 +127,15 @@ export const Contactos = () => {
                 <td>{contacto.apellido}</td>
                 <td>{contacto.email}</td>
                 <td>{contacto.telefono}</td>
-                <td>
+                <td className="acciones">
                   <Link to={`/edit/${contacto.id}`}>
-                    <Button variant="info" className="mr-2">
-                      Editar
-                    </Button>
+                    <img src="/edit.png" className="edit-contact-icon" />
                   </Link>
-                  <Button variant="danger" onClick={() => confirmDelete(contacto.id)}>
-                    Eliminar
-                  </Button>
+                  <img
+                    src="/delete.png"
+                    className="delete-contact-icon"
+                    onClick={() => confirmDelete(contacto.id)}
+                  />
                 </td>
               </tr>
             ))}
