@@ -14,7 +14,7 @@ export const Login = () => {
 
     try {
       await auth.login(email, password);
-      navigate("/contacts"); // Redirige al componente Principal
+      navigate("/"); // Redirige al componente Principal
     } catch (error) {
       console.error("Error logging in:", error);
       alert("Error al iniciar sesión: " + error.message); 

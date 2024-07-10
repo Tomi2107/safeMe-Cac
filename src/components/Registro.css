@@ -1,7 +1,7 @@
 @import url('../index.css');
 
 .navbar__menu {
-    display: none;
+    display: flex;
 }
 .form-container {
     display: flex;

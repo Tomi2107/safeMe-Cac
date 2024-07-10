@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import {MainHeader} from './MainHeader'
+
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { MainHeader } from './MainHeader';
 import { Footer } from './Footer';
 
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { collection, doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig/firebase';
 import { setDoc } from 'firebase/firestore'; // Importo setDoc
 import { useAuth } from "../context/authContext";
 import './Registro.css';
+
+const mySwal = withReactContent(Swal);
 
 export const Registro = () => {
   const auth = useAuth();
@@ -23,7 +24,7 @@ export const Registro = () => {
   const [contraseña2, setContraseña2] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     // Validación básica de contraseña
@@ -33,30 +34,50 @@ export const Registro = () => {
     }
 
     try {
-      const response = await auth.register(email, contraseña); // Uso auth desde context
-      console.log(response); 
+      const response = await auth.register(email, contraseña);
 
-      // Obtengo el nuevo user UID 
-      const userId = response.user.uid;
+      if (response) {
+        console.log(response); 
 
-      // Creo un documento de usuario en  Firestore 
-      if (userId) {
-        const userRef = doc(collection(db, 'usuarios'), userId);
-        await setDoc(userRef, {
-          nombre,
-          apellido,
-          email,
+        // Extraigo el user ID desde Firebase response
+        const userId = response.user.uid;
+
+        // Creo el documento usuario in Firestore 
+        if (userId) {
+          const userRef = doc(collection(db, 'usuarios'), userId);
+          await setDoc(userRef, {
+            nombre,
+            apellido,
+            email,
+          });
+        }
+
+        
+        await auth.login(email, contraseña);
+
+        mySwal.fire({
+          text: "¡Usuario registrado exitosamente!",
+          icon: "success",
+        });
+
+        navigate('/'); // Redirijo al componente principal
+      } else {
+        console.error('Error registering user:', 'Ocurrió un error al registrar el usuario');
+        mySwal.fire({
+          title: 'Error',
+          text: 'Error al registrar usuario: Ocurrió un error al registrar el usuario',
+          icon: 'error',
         });
       }
-
-      alert("Usuario registrado con éxito");
-      navigate('/'); // Redirijo si el registro fue exitoso.
     } catch (error) {
       console.error('Error registering user:', error);
-      alert('Error al registrar usuario: ' + error.message);
+      mySwal.fire({
+        title: 'Error',
+        text: 'Error al registrar usuario: ' + error.message,
+        icon: 'error',
+      });
     }
   };
-
 
   return (
     <>
@@ -94,4 +115,7 @@ export const Registro = () => {
   );
 };
 
-export default Registro;
+
+
+
+
