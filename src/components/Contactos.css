@@ -4,6 +4,7 @@
     align-items: center;
     padding: 8%;
     font-family: var(--alternative-font);
+    font-size: var(--font-medium);
   }
   
   .contactos-table th,

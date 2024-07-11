@@ -3,6 +3,7 @@
   align-items: center;
   font-family: var(--alternative-font);
   padding: 6%;
+  font-size: var(--font-medium);
 }
 
 .row {
