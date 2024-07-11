@@ -94,8 +94,8 @@ export const Principal = () => {
       <MainHeader />
       <main>
         <section className="principal__buttons">
-            <img className="principal__button" src="./src/assets/crisis_alert_48dp.png" alt="Alerta Seguridad" onClick={handleSecurityAlert}/>
-            <img className="principal__button" src="./src/assets/health_and_safety_48dp.png" alt="Alerta Salud" onClick={handleHealthAlert}/>
+            <img className="principal__button" src="/assets/crisis_alert_48dp.svg" alt="Alerta Seguridad" onClick={handleSecurityAlert}/>
+            <img className="principal__button" src="/assets/health_and_safety_48dp.png" alt="Alerta Salud" onClick={handleHealthAlert}/>
         </section>
       </main>
       <Footer />
