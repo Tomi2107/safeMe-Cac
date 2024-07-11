@@ -23,7 +23,7 @@ export const MainHeader = () => {
       <div className="container navbar">
         {/* Logo SafeMe */}
         <Link to="/">
-          <img className="navbar__logo" src="../src/assets/SafeMe.png" alt="" />
+          <img className="navbar__logo" src="/assets/safeme.png" alt="" />
         </Link>
 
         {/* Links condicionales basados en el estado de login */}
