@@ -87,13 +87,12 @@ export const Edit = () => {
     <>
     <MainHeader/>
     <div className="container-edit">
-        <div className="row">
-          <div className="col-6">
-            <h1 className="text-center">Editar contacto</h1>
+        <div>
             {loggedIn ? (
-              <form onSubmit={updateContact} className="w-100">
+              <form onSubmit={updateContact} className="w-100 form-container">
+                <h1 className="text-center">Editar contacto</h1>
                 <div className="w-100">
-                  <label className="form-label">Nombre</label>
+                  <label>Nombre</label>
                   <input
                     type="text"
                     value={nombre}
@@ -104,7 +103,7 @@ export const Edit = () => {
                 </div>
 
                 <div className="w-100">
-                  <label className="form-label">Apellido</label>
+                  <label>Apellido</label>
                   <input
                     type="text"
                     value={apellido}
@@ -115,7 +114,7 @@ export const Edit = () => {
                 </div>
 
                 <div className="w-100">
-                  <label className="form-label">Email</label>
+                  <label>Email</label>
                   <input
                     type="email"
                     value={email}
@@ -126,7 +125,7 @@ export const Edit = () => {
                 </div>
 
                 <div className="w-100">
-                  <label className="form-label">Telefono</label>
+                  <label>Telefono</label>
                   <input
                     type="tel"
                     value={telefono}
@@ -152,7 +151,6 @@ export const Edit = () => {
             )}
           </div>
         </div>
-      </div>
     <Footer/>
     </>
     )

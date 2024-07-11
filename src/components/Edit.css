@@ -1,21 +1,11 @@
 .container-edit {
   display: flex;
-  align-items: center;
-  font-family: var(--alternative-font);
-  padding: 6%;
-}
-
-.row {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.col-6 {
-  display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  font-family: var(--alternative-font);
+  padding: 6%;
+  font-size: var(--font-medium);
 }
 
 h1 {
@@ -26,10 +16,18 @@ h1 {
   margin-bottom: 15px;
 }
 
+.form-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
 .button-group {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px; /* Espacio entre los botones */
+  font-family: var(--alternative-font);
 }
 
 .w-100 {
