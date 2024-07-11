@@ -31,17 +31,17 @@ export const MainHeader = () => {
           <ul className="navbar__menu">
             <li>
               <Link to="/profile">
-                <img src="./src/assets/person48.svg" alt="" />
+                <img src="/assets/person48.svg" alt="" />
               </Link>
             </li>
             <li>
               <Link to="/contacts">
-                <img src="./src/assets/groups48.svg" alt="" />
+                <img src="/assets/groups48.svg" alt="" />
               </Link>
             </li>
             <li>
               <Link to="/alerts">
-                <img src="./src/assets/settings48.svg" alt="" />
+                <img src="/assets/settings48.svg" alt="" />
               </Link>
             </li>
             <li>
@@ -54,12 +54,12 @@ export const MainHeader = () => {
           <ul className="navbar__menu">
             <li>
               <Link to="/login">
-                <img src="./src/assets/login48.svg" alt="" />
+                <img src="/assets/login48.svg" alt="" />
               </Link>
             </li>
             <li>
               <Link to="/register">
-                <img src="./src/assets/person-add48.svg" alt="" />
+                <img src="/assets/person-add48.svg" alt="" />
               </Link>
             </li>
           </ul>

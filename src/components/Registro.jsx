@@ -82,32 +82,31 @@ export const Registro = () => {
   return (
     <>
       <MainHeader />
-      <div className="form-container">
-        <h1>CREA TU CUENTA</h1>
-        <h2>Registra tus datos</h2>
-        <br />
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
+      <div className="registro__container">
+        <h1 className='registro__titulo'>CREA TU CUENTA</h1>
+        <h2 className='registro__subtitulo'>Registra tus datos</h2>
+        <form className='registro__form' onSubmit={handleSubmit}>
+          <div className="registro__item">
             <label htmlFor="nombre">Nombre:</label>
             <input type="text" id="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
           </div>
-          <div className="form-group">
+          <div className="registro__item">
             <label htmlFor="apellido">Apellido:</label>
             <input type="text" id="apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} required />
           </div>
-          <div className="form-group">
+          <div className="registro__item">
             <label htmlFor="email">E-mail:</label>
             <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
-          <div className="form-group">
+          <div className="registro__item">
             <label htmlFor="contraseña">Contraseña:</label>
             <input type="password" id="contraseña" value={contraseña} onChange={(e) => setContraseña(e.target.value)} required />
           </div>
-          <div className="form-group">
+          <div className="registro__item">
             <label htmlFor="contraseña2">Repita contraseña:</label>
             <input type="password" id="contraseña2" value={contraseña2} onChange={(e) => setContraseña2(e.target.value)} required />
           </div>
-          <button type="submit">Registrar</button>
+          <button className='registro__button' type="submit">Registrar</button>
         </form>
       </div>
       <Footer />

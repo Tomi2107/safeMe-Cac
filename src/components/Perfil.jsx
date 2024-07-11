@@ -8,6 +8,7 @@ import { MainHeader } from './MainHeader';
 import { Footer } from './Footer';
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
+import "./Perfil.css";
 
 const mySwal = withReactContent(Swal);
 
@@ -71,12 +72,12 @@ export const Perfil = () => {
   return (
     <>
       <MainHeader />
-      <div className="form-container">
-        <h1>PERFIL</h1>
-        <h2>Completa tus datos</h2>
+      <div className="perfil__container">
+        <h1 className="perfil__titulo">PERFIL</h1>
+        <h2 className="perfil__subtitulo">Completa tus datos</h2>
         <br />
         {loggedIn ? (
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form className="perfil__form" onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="documento">Documento:</label>
             <input type="text" id="documento" {...register("documento")} />
 
@@ -108,7 +109,7 @@ export const Perfil = () => {
             <label htmlFor="notas">Otras notas médicas:</label>
             <textarea id="notas" {...register("notas")} />
 
-            <button type="submit">Completar</button>
+            <button className="perfil__button" type="submit">Completar</button>
           </form>
         ) : (
           <p>Debes iniciar sesión para completar tu perfil.</p>

@@ -1,5 +1,43 @@
-@import url('../index.css');
+.perfil__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    text-align: center;
+    font-family: var(--alternative-font);
+  }
+    
+  .perfil__titulo {
+      font-size: var(--font-display);
+      padding-top: var(--spacing-24);
+  }
+  
+  .perfil__subtitulo {
+    font-size: var(--font-large);
+    padding: var(--spacing-24);
+  }
+  
+  .perfil__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: center;
+    width: 50%;
+    font-size: var(--font-medium);
+  }
+    
+  .perfil__item {
+      display: contents;
+  }
 
-.form-container {
+  .perfil__button {
+    grid-column: span 2;
+    padding: var(--spacing-12);
+    background-color: var(--primary-900);
+    color: white;
+    border: 1.3px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-self: center;
     font-family: var(--alternative-font);
 }
