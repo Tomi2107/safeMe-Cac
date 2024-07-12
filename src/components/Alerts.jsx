@@ -13,8 +13,10 @@ import {
 } from "firebase/firestore";
 import { MainHeader } from "./MainHeader";
 import { Footer } from "./Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Alerts.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 export const Alerts = () => {
   const [contactos, setContactos] = useState([]);
@@ -27,7 +29,8 @@ export const Alerts = () => {
   const [alertasSeguridad, setAlertasSeguridad] = useState({}); // Initialize as an empty object
   const [alertasSalud, setAlertasSalud] = useState({}); // Initialize as an empty object
   const { user } = useAuth();
-
+  const mySwal = withReactContent(Swal);
+  const navigate = useNavigate();
   const userId = user?.uid;
 
   useEffect(() => {
@@ -131,10 +134,18 @@ export const Alerts = () => {
         });
       }
 
-      alert("Alertas guardadas correctamente.");
+      mySwal.fire({
+        text: "Alertas guardadas correctamente.",
+        icon: "success",
+      }).then(() => {
+        navigate("/");
+      });
     } catch (error) {
       console.error("Error saving alerts:", error);
-      alert("Error al guardar las alertas.");
+      mySwal.fire({
+        text: "Error al guardar las alertas",
+        icon: "error",
+      });
     }
   };
 
