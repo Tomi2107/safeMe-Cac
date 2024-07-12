@@ -21,11 +21,14 @@ export const Perfil = () => {
   const userId = user?.uid; // Extraigo el user ID si el usuario existe
 
   useEffect(() => {
-    setLoggedIn(!!auth.user); // Actualizar el estado de inicio de sesión y los cambios de usuario
-    if (loggedIn && userId) {
+    if (user) { // Verifico la disponibilidad de user antes de actualizar loggedIn
+      setLoggedIn(true);
       fetchUserData(); // Buscar datos de usuario si está logueado y tiene ID
+      // Llamo a fetchUserData solo cuando user esté disponible
+    } else {
+      setLoggedIn(false);
     }
-  }, [auth, userId]);
+  }, [user]);
 
   const fetchUserData = async () => {
     try {

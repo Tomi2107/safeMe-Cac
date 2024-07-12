@@ -49,6 +49,10 @@ export const Alerts = () => {
 
         setAlertasSeguridad(mensajeSeguridadData);
         setAlertasSalud(mensajeSaludData);
+
+        // Para que muestre los mensajes que ya están creados
+        if (mensajeSeguridadData.mensaje) setMensajeSeguridad(mensajeSeguridadData.mensaje);
+        if (mensajeSaludData.mensaje) setMensajeSalud(mensajeSaludData.mensaje);
       } catch (error) {
         console.error('Error fetching alerts:', error);
         // You can display an error message to the user here
@@ -104,11 +108,6 @@ export const Alerts = () => {
       }
 
       alert('Alertas guardadas correctamente.');
-      // Clear input fields and selections
-      setSelectedContactoSeguridad('');
-      setSelectedContactoSalud('');
-      setMensajeSeguridad('');
-      setMensajeSalud('');
     } catch (error) {
       console.error('Error saving alerts:', error);
       alert('Error al guardar las alertas.');
