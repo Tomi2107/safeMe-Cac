@@ -1,14 +1,14 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useAuth } from '../context/authContext'; // Importo useAuth hook
-import { updateDoc, doc } from 'firebase/firestore'; // Importo Firestore methods
+import { updateDoc, doc, addDoc, getDoc } from 'firebase/firestore'; // Importo Firestore methods
 import { useNavigate } from 'react-router-dom'; // Importo useNavigate hook
 import { db } from "../firebaseConfig/firebase"; 
 import { MainHeader } from './MainHeader';
 import { Footer } from './Footer';
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import "./Perfil.css";
+import "./Perfil.css"
 
 const mySwal = withReactContent(Swal);
 
@@ -22,7 +22,41 @@ export const Perfil = () => {
 
   useEffect(() => {
     setLoggedIn(!!auth.user); // Actualizar el estado de inicio de sesión y los cambios de usuario
-  }, [auth]);
+    if (loggedIn && userId) {
+      fetchUserData(); // Buscar datos de usuario si está logueado y tiene ID
+    }
+  }, [auth, userId]);
+
+  const fetchUserData = async () => {
+    try {
+      const userRef = doc(db, "usuarios", userId);
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        reset({
+          documento: userData.documento,
+          fechaNacimiento: userData.fechaNacimiento,
+          tipoSangre: userData.tipoSangre,
+          enfermedades: userData.enfermedades,
+          alergias: userData.alergias,
+          notas: userData.notas,
+        }); // Pre-llenar el formulario con datos del usuario
+        } else {
+          console.log("Usuario no encontrado en Firestore");
+        // Inicializar valores predeterminados si no existen datos
+        reset({
+          documento: '',
+          fechaNacimiento: '',
+          tipoSangre: '',
+          enfermedades: '',
+          alergias: '',
+          notas: '',
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const onSubmit = async (data) => {
     if (!loggedIn) {
@@ -46,18 +80,21 @@ export const Perfil = () => {
     }
 
     try {
-      // Update el documento de usuario con data
       const userRef = doc(db, "usuarios", userId); // Referencia al documento de usuario
-
-      await updateDoc(userRef, data); // Update el documento de usuario con los datos de perfil
-
-      console.log("Perfil actualizado exitosamente");
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        await updateDoc(userRef, data); // Update el documento de usuario con los datos de perfil
+        console.log("Perfil actualizado exitosamente");
+      } else {
+        await addDoc(collection(db, "usuarios"), data); // Add nuevo documento de usuario
+        console.log("Perfil creado exitosamente");
+      }
       mySwal.fire({
         text: "Información guardada exitosamente",
         icon: "success",
       });
       reset(); // Limpio el formulario después del guardado exitoso
-      navigate('/'); 
+      navigate('/');
     } catch (error) {
       console.error("Error saving profile data:", error);
       mySwal.fire({
@@ -67,7 +104,7 @@ export const Perfil = () => {
       });
     }
   };
-  
+
 
   return (
     <>
