@@ -38,6 +38,7 @@
   align-items: center;
   padding-top: var(--spacing-24);
   padding-bottom: var(--spacing-24);
+  column-gap: var(--spacing-68);
 }
 
 .alerts__button {
