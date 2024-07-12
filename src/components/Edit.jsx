@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getDoc, doc, updateDoc } from 'firebase/firestore'; // Importo Firestore methods
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { getDoc, doc, updateDoc } from "firebase/firestore"; // Importo Firestore methods
 import { db } from "../firebaseConfig/firebase";
-import { useAuth } from '../context/authContext'; // Importo useAuth hook
-import Swal from 'sweetalert2'; // Importo SweetAlert2
-import { MainHeader } from './MainHeader';
-import { Footer } from './Footer';
-import './Edit.css'
+import { useAuth } from "../context/authContext"; // Importo useAuth hook
+import Swal from "sweetalert2"; // Importo SweetAlert2
+import { MainHeader } from "./MainHeader";
+import { Footer } from "./Footer";
+import "./Edit.css";
 
 export const Edit = () => {
   // Estados para el formulario
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefono, setTelefono] = useState('');
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [email, setEmail] = useState("");
+  const [telefono, setTelefono] = useState("");
 
   // Auth context
   const auth = useAuth();
@@ -34,7 +34,7 @@ export const Edit = () => {
     }
 
     try {
-      const contactDoc = doc(db, 'contactos', id);
+      const contactDoc = doc(db, "contactos", id);
       const data = {
         nombre,
         apellido,
@@ -45,19 +45,19 @@ export const Edit = () => {
 
       // Muesta alerta exitoso with SweetAlert2
       Swal.fire({
-        title: '¡Contacto editado!',
-        text: '',
-        icon: 'success',
+        title: "¡Contacto editado!",
+        text: "",
+        icon: "success",
       }).then(() => {
         // Redireccionar a 'Contacts' después del éxito
-        navigate('/contacts');
+        navigate("/contacts");
       });
     } catch (error) {
       console.error("Error editing contact:", error);
       Swal.fire({
-        title: 'Error al editar contacto',
+        title: "Error al editar contacto",
         text: error.message,
-        icon: 'error',
+        icon: "error",
       });
     }
   };
@@ -66,7 +66,7 @@ export const Edit = () => {
   useEffect(() => {
     /* Función para obtener un documento por su ID */
     const getContactById = async (id) => {
-      const contactDoc = await getDoc(doc(db, 'contactos', id));
+      const contactDoc = await getDoc(doc(db, "contactos", id));
       if (contactDoc.exists()) {
         setNombre(contactDoc.data().nombre);
         setApellido(contactDoc.data().apellido);
@@ -77,81 +77,74 @@ export const Edit = () => {
       }
     };
 
-    if (loggedIn) { // Solo busca el contacto si está logueado
+    if (loggedIn) {
+      // Solo busca el contacto si está logueado
       getContactById(id);
     }
   }, [id, loggedIn]);
 
-
   return (
     <>
-    <MainHeader/>
-    <div className="container-edit">
-        <div>
-            {loggedIn ? (
-              <form onSubmit={updateContact} className="w-100 form-container">
-                <h1 className="text-center">Editar contacto</h1>
-                <div className="w-100">
-                  <label>Nombre</label>
-                  <input
-                    type="text"
-                    value={nombre}
-                    onChange={(evento) => setNombre(evento.target.value)}
-                    className="form-control"
-                    required
-                  />
-                </div>
+      <MainHeader />
+      {loggedIn ? (
+        <>
+          <div className="edit__container">
+            <h1 className="edit__title">CONTACTO</h1>
+            <h2 className="edit__subtitle">
+              Actualice los datos de su contacto
+            </h2>
+            <form onSubmit={updateContact} className="edit__form">
+              <label>Nombre</label>
+              <input
+                type="text"
+                value={nombre}
+                onChange={(evento) => setNombre(evento.target.value)}
+                required
+              />
 
-                <div className="w-100">
-                  <label>Apellido</label>
-                  <input
-                    type="text"
-                    value={apellido}
-                    onChange={(evento) => setApellido(evento.target.value)}
-                    className="form-control"
-                    required
-                  />
-                </div>
+              <label>Apellido</label>
+              <input
+                type="text"
+                value={apellido}
+                onChange={(evento) => setApellido(evento.target.value)}
+                required
+              />
 
-                <div className="w-100">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(evento) => setEmail(evento.target.value)}
-                    className="form-control"
-                    required
-                  />
-                </div>
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(evento) => setEmail(evento.target.value)}
+                required
+              />
 
-                <div className="w-100">
-                  <label>Telefono</label>
-                  <input
-                    type="tel"
-                    value={telefono}
-                    onChange={(evento) => setTelefono(evento.target.value)}
-                    className="form-control"
-                    required
-                  />
-                </div>
+              <label>Telefono</label>
+              <input
+                type="tel"
+                value={telefono}
+                onChange={(evento) => setTelefono(evento.target.value)}
+                required
+              />
 
-                <div className="button-group w-100">
-                  <button type="submit" className="btn btn-primary me-2">
-                    Guardar cambios
+              <div className="edit__buttons">
+                <button type="submit" className="edit__button">
+                  Guardar cambios
+                </button>
+                <Link to="/contacts">
+                  <button type="button" className="edit__button">
+                    CANCELAR
                   </button>
-                  <Link to="/contacts">
-                    <button type="button" className="btn btn-danger">
-                      CANCELAR
-                    </button>
-                  </Link>
-                </div>
-              </form>
-            ) : (
-              <p className="text-center">Tenés que estar logueado para editar el contacto.</p>
-            )}
+                </Link>
+              </div>
+            </form>
           </div>
-        </div>
-    <Footer/>
+        </>
+      ) : (
+        <p className="edit__error-msg">
+          Tenés que estar logueado para editar el contacto.
+        </p>
+      )}
+      <Footer />
     </>
-    )
-}
+  );
+};
