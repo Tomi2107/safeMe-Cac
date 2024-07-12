@@ -1,39 +1,51 @@
-.container-edit {
+.edit__container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-family: var(--alternative-font);
-  padding: 6%;
+}
+
+.edit__title {
+  text-align: center;
+  font-size: var(--font-display);
+  padding-top: var(--spacing-24);
+}
+
+.edit__subtitle {
+  text-align: center;
+  font-size: var(--font-large);
+  padding: var(--spacing-24);
+}
+
+.edit__form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  align-items: center;
+  width: 50%;
   font-size: var(--font-medium);
 }
 
-h1 {
-  margin-bottom: 20px;
-}
-
-.form-control {
-  margin-bottom: 15px;
-}
-
-.form-container {
-  width: 100%;
-  max-width: 500px;
+.edit__buttons {
+  grid-column: span 2;
   display: flex;
-  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-top: var(--spacing-24);
+  padding-bottom: var(--spacing-24);
 }
 
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px; /* Espacio entre los botones */
+.edit__button {
   font-family: var(--alternative-font);
+  padding: 5px 5px;
+  background-color: var(--primary-900);
+  color: white;
+  border: 1.3px solid black;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.w-100 {
-  width: 100%;
-}
-
-.text-center {
+.edit__error-msg {
   text-align: center;
 }
