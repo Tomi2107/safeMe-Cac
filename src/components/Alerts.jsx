@@ -142,65 +142,55 @@ export const Alerts = () => {
     <>
       <MainHeader />
       {user ? (
-        <div>
-          <div>
-            <h2>Alertas de Seguridad</h2>
-            {isLoading ? (
-              <p>Cargando contactos...</p>
-            ) : (
-              <select
-                value={selectedContactoSeguridad}
-                onChange={handleContactoChangeSeguridad}
-                required
-              >
-                <option value="">Seleccionar Contacto</option>
-                {contactos.map((contacto) => (
-                  <option key={contacto.id} value={contacto.id}>
-                    {contacto.nombre} {contacto.apellido}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-          <div>
-            <textarea
-              value={mensajeSeguridad}
-              onChange={handleMensajeSeguridadChange}
-              placeholder="Ingresar mensaje de alerta"
-              required
-            />
-          </div>
-          <div>
-            <h2>Alertas de Salud</h2>
-            {isLoading ? (
-              <p>Cargando contactos...</p>
-            ) : (
-              <select
-                value={selectedContactoSalud}
-                onChange={handleContactoChangeSalud}
-                required
-              >
-                <option value="">Seleccionar Contacto</option>
-                {contactos.map((contacto) => (
-                  <option key={contacto.id} value={contacto.id}>
-                    {contacto.nombre} {contacto.apellido}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-          <div>
-            <textarea
-              value={mensajeSalud}
-              onChange={handleMensajeSaludChange}
-              placeholder="Ingresar mensaje de alerta"
-              required
-            />
-            <button onClick={handleAddAlertas}>Agregar Alerta</button>
-          </div>
-          <Link to="/">
-            <button className="btn btn-danger">CANCELAR</button>
-          </Link>
+        <div className='alerts__container'>
+            <h1 className="alerts__titulo">ALERTAS</h1>
+            <h2 className="alerts__subtitulo">Configura tus alertas</h2>
+            <h2 className='alerts__section'>Alerta de Seguridad</h2>
+            <div className='alerts__group'>
+                {isLoading ? (
+                  <p>Cargando contactos...</p>
+                ) : (
+                  <>
+                  <label htmlFor="contactoSeguridad">Contacto:</label>
+                  <select id="contactoSeguridad" value={selectedContactoSeguridad} onChange={handleContactoChangeSeguridad} required>
+                    <option value="">Seleccionar Contacto</option>
+                    {contactos.map((contacto) => (
+                      <option key={contacto.id} value={contacto.id}>
+                        {contacto.nombre} {contacto.apellido}
+                      </option>
+                    ))}
+                  </select>
+                  </>
+                )}
+                <label htmlFor="mensajeSeguridad">Mensaje:</label>
+                <textarea id='mensajeSeguridad' value={mensajeSeguridad} onChange={handleMensajeSeguridadChange} placeholder="Ingresar mensaje de alerta" required />
+            </div>
+            <h2 className='alerts__section'>Alerta de Salud</h2>
+            <div className='alerts__group'>
+                {isLoading ? (
+                  <p>Cargando contactos...</p>
+                ) : (
+                  <>
+                  <label htmlFor="contactoSalud">Contacto:</label>
+                  <select id="contactoSalud" value={selectedContactoSalud} onChange={handleContactoChangeSalud} required>
+                    <option value="">Seleccionar Contacto</option>
+                    {contactos.map((contacto) => (
+                      <option key={contacto.id} value={contacto.id}>
+                        {contacto.nombre} {contacto.apellido}
+                      </option>
+                    ))}
+                  </select>
+                  </>
+                )}
+                <label htmlFor="mensajeSalud">Mensaje:</label>
+                <textarea id='mensajeSalud' value={mensajeSalud} onChange={handleMensajeSaludChange} placeholder="Ingresar mensaje de alerta" required />
+            </div>
+            <div className='alerts__buttons'>
+                <button className="alerts__button" onClick={handleAddAlertas}>Agregar Alertas</button>
+                <Link to="/">
+                  <button className="alerts__button">CANCELAR</button>
+                </Link>
+            </div>
         </div>
       ) : (
         <div>
