@@ -21,3 +21,6 @@ header {
   padding: var(--spacing-36);
 }
 
+.navbar__logout {
+  cursor: pointer;
+}
