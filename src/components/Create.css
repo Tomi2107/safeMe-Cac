@@ -36,8 +36,12 @@
   padding-bottom: var(--spacing-24);
 }
 
-.btn {
-  justify-content: center;
-  /* margin: 0 5px; */
+.create__button {
   font-family: var(--alternative-font);
+  padding: 5px 5px;
+  background-color: var(--primary-900);
+  color: white;
+  border: 1.3px solid black;
+  border-radius: 5px;
+  cursor: pointer;
 }

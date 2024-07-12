@@ -64,48 +64,44 @@ export const Create = () => {
         <h1 className="create__title">CONTACTO</h1>
         <h2 className="create__subtitle">Registra a tu contacto</h2>
         <form onSubmit={createContacto} className="create__form">
-          <label htmlFor="nombre" className="form-label">
+          <label htmlFor="nombre">
             Nombre:
           </label>
           <input
             type="text"
-            className="form-control"
             id="nombre"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             required
           />
 
-          <label htmlFor="apellido" className="form-label">
+          <label htmlFor="apellido">
             Apellido:
           </label>
           <input
             type="text"
-            className="form-control"
             id="apellido"
             value={apellido}
             onChange={(e) => setApellido(e.target.value)}
             required
           />
 
-          <label htmlFor="email" className="form-label">
+          <label htmlFor="email">
             Email:
           </label>
           <input
             type="email"
-            className="form-control"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
 
-          <label htmlFor="telefono" className="form-label">
+          <label htmlFor="telefono">
             Teléfono:
           </label>
           <input
             type="tel"
-            className="form-control"
             id="telefono"
             value={telefono}
             onChange={(e) => setTelefono(e.target.value)}
@@ -113,11 +109,11 @@ export const Create = () => {
           />
 
           <div className="create__buttons">
-            <button type="submit" className="btn">
+            <button type="submit" className="create__button">
               Registrar
             </button>
             <Link to="/contacts">
-              <button type="button" className="btn">
+              <button type="button" className="create__button">
                 CANCELAR
               </button>
             </Link>

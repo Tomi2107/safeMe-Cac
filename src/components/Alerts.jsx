@@ -65,7 +65,7 @@ export const Alerts = () => {
         <option value="Seguridad">Seguridad</option>
         </select>
       </div>
-        <button type="submit">Actualizar</button>
+        <button className='alert__button' type="submit">Actualizar</button>
       </form>
     </div>
     <Footer/>
