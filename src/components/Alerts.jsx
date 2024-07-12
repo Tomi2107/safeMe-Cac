@@ -1,74 +1,174 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import {MainHeader} from './MainHeader';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/authContext';
+import { db } from "../firebaseConfig/firebase"
+import { collection, getDocs, doc, setDoc, updateDoc, query, where, getDoc } from 'firebase/firestore';
+import { MainHeader } from './MainHeader'; 
 import { Footer } from './Footer';
-import './Alerts.css';
+import { Link } from 'react-router-dom';
+import "./Alerts.css"
 
-const mySwal = withReactContent(Swal)
-
-const schema = yup.object().shape({
-  nombre: yup.string().trim().required('El nombre es requerido'),
-  apellido: yup.string().trim().required('El apellido es requerido'),
-  email: yup.string().trim().email('El email no es válido').required('El email es requerido'),
-  mensaje: yup.string().trim().required('El mensaje es requerido')
-});
 
 export const Alerts = () => {
-  const { register: alerts, handleSubmit, formState: { errors }, reset } = useForm({
-    resolver: yupResolver(schema)
-  });
 
-  const onSubmit = (data) => {
-    console.log('Datos del formulario:', data);
-    Swal.fire({
-      text: "Se ha creado un contacto",
-      icon: "success"
-    });
-    reset();
+  const [contactos, setContactos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedContactoSeguridad, setSelectedContactoSeguridad] = useState('');
+  const [selectedContactoSalud, setSelectedContactoSalud] = useState('');
+  const [mensajeSeguridad, setMensajeSeguridad] = useState('');
+  const [mensajeSalud, setMensajeSalud] = useState('');
+  const [alertasSeguridad, setAlertasSeguridad] = useState({}); // Initialize as an empty object
+  const [alertasSalud, setAlertasSalud] = useState({}); // Initialize as an empty object
+  const { user } = useAuth();
+
+  const userId = user?.uid;
+
+  useEffect(() => {
+    const fetchContactos = async () => {
+      try {
+        const contactosQuery = query(collection(db, 'contactos'), where('usuarioId', '==', userId));
+        const contactosSnap = await getDocs(contactosQuery);
+        const contactosData = contactosSnap.docs.map((doc) => doc.data());
+        setContactos(contactosData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching contacts:', error);
+        // You can display an error message to the user here
+      }
+    };
+
+    const fetchAlertas = async () => {
+      try {
+        const mensajesSeguridadRef = doc(db, 'mensajesAlertaSeguridad', userId);
+        const mensajesSaludRef = doc(db, 'mensajesAlertaSalud', userId);
+
+        const mensajesSeguridadSnap = await getDoc(mensajesSeguridadRef);
+        const mensajesSaludSnap = await getDoc(mensajesSaludRef);
+
+        const mensajeSeguridadData = mensajesSeguridadSnap.exists() ? mensajesSeguridadSnap.data() : {};
+        const mensajeSaludData = mensajesSaludSnap.exists() ? mensajesSaludSnap.data() : {};
+
+        setAlertasSeguridad(mensajeSeguridadData);
+        setAlertasSalud(mensajeSaludData);
+      } catch (error) {
+        console.error('Error fetching alerts:', error);
+        // You can display an error message to the user here
+      }
+    };
+
+    fetchContactos();
+    fetchAlertas();
+  }, [user, db]);
+
+  const handleContactoChangeSeguridad = (event) => {
+    setSelectedContactoSeguridad(event.target.value);
   };
+
+  const handleContactoChangeSalud = (event) => {
+    setSelectedContactoSalud(event.target.value);
+  };
+
+  const handleMensajeSeguridadChange = (event) => {
+    setMensajeSeguridad(event.target.value);
+  };
+
+  const handleMensajeSaludChange = (event) => {
+    setMensajeSalud(event.target.value);
+  };
+
+  const handleAddAlertas = async () => {
+    if (!user) {
+      alert('Debes iniciar sesión para agregar alertas.');
+      return;
+    }
+
+    const mensajesSeguridadRef = doc(db, 'mensajesAlertaSeguridad', userId);
+    const mensajesSaludRef = doc(db, 'mensajesAlertaSalud', userId);
+
+    try {
+      // Update existing messages (if any)
+      if (alertasSeguridad.contactoId && alertasSalud.contactoId) {
+        await updateDoc(mensajesSeguridadRef, { mensaje: mensajeSeguridad });
+        await updateDoc(mensajesSaludRef, { mensaje: mensajeSalud });
+      } else {
+        // Add new messages
+        await setDoc(mensajesSeguridadRef, {
+          usuarioId: user.uid,
+          contactoId: selectedContactoSeguridad,
+          mensaje: mensajeSeguridad,
+        });
+        await setDoc(mensajesSaludRef, {
+          usuarioId: user.uid,
+          contactoId: selectedContactoSalud,
+          mensaje: mensajeSalud,
+        });
+      }
+
+      alert('Alertas guardadas correctamente.');
+      // Clear input fields and selections
+      setSelectedContactoSeguridad('');
+      setSelectedContactoSalud('');
+      setMensajeSeguridad('');
+      setMensajeSalud('');
+    } catch (error) {
+      console.error('Error saving alerts:', error);
+      alert('Error al guardar las alertas.');
+    }
+  };
+  
 
   return (
     <>
-    <MainHeader/>
-    <div className="form-container">
-      <h1>CREA TU CONTACTO</h1>
-      <br />
-      <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="form-group">
-          <label htmlFor="nombre">Nombre:</label>
-          <input type="text" id="nombre" {...alerts('nombre')} />
-          {errors.nombre && <p>{errors.nombre.message}</p>}
-      </div>
-      <div className="form-group">
-          <label htmlFor="apellido">Apellido:</label>
-          <input type="text" id="apellido" {...alerts('apellido')} />
-          {errors.apellido && <p>{errors.apellido.message}</p>}
-      </div>
-      <div className="form-group">
-          <label htmlFor="email">E-mail:</label>
-          <input type="email" id="email" {...alerts('email')} />
-          {errors.email && <p>{errors.email.message}</p>}
-      </div>
-      <div className="form-group">
-          <label htmlFor="mensaje">Mensaje:</label>
-          <textarea type="text" id="mensaje" className='large-textarea' {...alerts('mensaje')} />
-          {errors.mensaje && <p>{errors.mensaje.message}</p>}
-      </div>
-      <div className="form-group">
-        <label htmlFor="alerta">Emergencia</label>
-        <select name="alertas" id="alertas">
-        <option value="Salud">Salud</option>
-        <option value="Seguridad">Seguridad</option>
-        </select>
-      </div>
-        <button className='alert__button' type="submit">Actualizar</button>
-      </form>
-    </div>
-    <Footer/>
+      <MainHeader />
+      {user ? (
+        <div>
+          <div>
+            <h2>Alertas de Seguridad</h2>
+            {isLoading ? (
+              <p>Cargando contactos...</p>
+            ) : (
+              <select value={selectedContactoSeguridad} onChange={handleContactoChangeSeguridad} required>
+                <option value="">Seleccionar Contacto</option>
+                {contactos.map((contacto) => (
+                  <option key={contacto.id} value={contacto.id}>
+                    {contacto.nombre} {contacto.apellido}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+          <div>
+            <textarea value={mensajeSeguridad} onChange={handleMensajeSeguridadChange} placeholder="Ingresar mensaje de alerta" required />
+          </div>
+          <div>
+            <h2>Alertas de Salud</h2>
+            {isLoading ? (
+              <p>Cargando contactos...</p>
+            ) : (
+              <select value={selectedContactoSalud} onChange={handleContactoChangeSalud} required>
+                <option value="">Seleccionar Contacto</option>
+                {contactos.map((contacto) => (
+                  <option key={contacto.id} value={contacto.id}>
+                    {contacto.nombre} {contacto.apellido}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+          <div>
+            <textarea value={mensajeSalud} onChange={handleMensajeSaludChange} placeholder="Ingresar mensaje de alerta" required />
+            <button onClick={handleAddAlertas}>Agregar Alerta</button>
+          </div>
+          <Link to="/">
+            <button className="btn btn-danger">CANCELAR</button>
+          </Link>
+        </div>
+      ) : (
+        <div>
+          <p>Inicia sesión para ver tus contactos y crear alertas.</p>
+          <Link to="/login">Iniciar Sesión</Link>
+        </div>
+      )}
+      <Footer />
     </>
   );
-}
+};
