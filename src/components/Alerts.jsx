@@ -40,8 +40,10 @@ export const Alerts = () => {
           collection(db, "contactos"),
           where("usuarioId", "==", userId)
         );
+
         const contactosSnap = await getDocs(contactosQuery);
-        const contactosData = contactosSnap.docs.map((doc) => doc.data());
+        const contactosData = contactosSnap.docs.map((doc) => ({...doc.data(), id:doc.id}));
+        console.log(contactosData);
         setContactos(contactosData);
         setIsLoading(false);
       } catch (error) {
