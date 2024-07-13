@@ -3,83 +3,91 @@ import { Footer } from "./Footer";
 import emailjs from "emailjs-com"
 import { useEffect } from "react";
 import { db } from "../firebaseConfig/firebase.js";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, query, collection, where } from "firebase/firestore";
+import { useAuth } from '../context/authContext'; // Importo useAuth hook
+
 import "./Principal.css";
-import { string } from "yup";
 
 export const Principal = () => {
 
+  // trae usuario logueado
+  const auth = useAuth(); // Uso el useAuth hook
+  const { user } = useAuth(); // Asumo que el objeto user esta disponible en useAuth
+  const userId = user?.uid; // Extraigo el user ID si el usuario existe
+  const userName = user?.nombre + user?.apellido;
+
   const alertaSeguridad = {
     contactoId : "",
-    nombre : "",
+    nombreDesde : "",
+    nombrePara : "",
     email : "",
     mensaje : ""
   };
 
   const alertaSalud = {
     contactoId : "",
-    nombre : "",
+    nombreDesde : "",
+    nombrePara: "",
     email : "",
     mensaje : ""
   };
   
   // Acciones al cargar el componente
   useEffect(() => {
-    const getAlerts = async () => {
+    const getAlerts = async (userId) => {
+      // obtengo nombre de usuario logueado
+      const userRef = doc(db, "usuarios", userId);
+      const docSnap = await getDoc(userRef);
+      alertaSeguridad.nombreDesde = docSnap.data().nombre + " " + docSnap.data().apellido;
+      alertaSalud.nombreDesde = docSnap.data().nombre + " " + docSnap.data().apellido;
       // obtengo alerta de seguridad
-      const AlertaSeguridadDoc = await getDoc(doc(db, "mensajesAlertaSeguridad", "3drDVrXKl0I6Aa7vVKn9")); //todo: tomar el 1o, sin usar la key del 1o
-      alertaSeguridad.contactoId = AlertaSeguridadDoc.data().contactoId;
-      alertaSeguridad.mensaje = AlertaSeguridadDoc.data().mensaje;
+      const dataSeg = await getDocs(query(collection(db, "mensajesAlertaSeguridad"), where("usuarioId", "==", userId)));
+      alertaSeguridad.contactoId = dataSeg.docs[0].data().contactoId;
+      alertaSeguridad.mensaje = dataSeg.docs[0].data().mensaje;
       // obtengo alerta de salud
-      const AlertaSaludDoc = await getDoc(doc(db, "mensajesAlertaSalud", "oJbxfkuYjQu7tIWSJpkm"));  //todo: tomar el 1o, sin usar la key del 1o
-      alertaSalud.contactoId = AlertaSaludDoc.data().contactoId;
-      alertaSalud.mensaje = AlertaSaludDoc.data().mensaje;
+      const dataSal = await getDocs(query(collection(db, "mensajesAlertaSalud"), where("usuarioId", "==", userId)));
+      alertaSalud.contactoId = dataSal.docs[0].data().contactoId;
+      alertaSalud.mensaje = dataSal.docs[0].data().mensaje;
       // obtengo contacto seguridad
       const contactoSeguridadDoc = await getDoc(doc(db, "contactos", alertaSeguridad.contactoId));
-      alertaSeguridad.nombre = contactoSeguridadDoc.data().nombre + " " + contactoSeguridadDoc.data().apellido;
+      alertaSeguridad.nombrePara = contactoSeguridadDoc.data().nombre + " " + contactoSeguridadDoc.data().apellido;
       alertaSeguridad.email = contactoSeguridadDoc.data().email;
       // obtengo contacto salud
       const contactoSaludDoc = await getDoc(doc(db, "contactos", alertaSalud.contactoId));
-      alertaSalud.nombre = contactoSaludDoc.data().nombre + " " + contactoSaludDoc.data().apellido;
+      alertaSalud.nombrePara = contactoSaludDoc.data().nombre + " " + contactoSaludDoc.data().apellido;
       alertaSalud.email = contactoSaludDoc.data().email;
     };
     // inicializo sistema de mails con la public key dada de alta en el servicio emailjs
     emailjs.init("z4Y3ZaHQXif-4Hz2M");
-    getAlerts();
-    console.log(alertaSeguridad, alertaSalud);
-  }, []);
+    // trae configuración de alertas del usuario logueado
+    console.log("usuario logueado: ", userId, userName)
+    if (userId) {
+      getAlerts(userId);
+      console.log(alertaSeguridad, alertaSalud);
+    }
+  }, [userId]);
 
   const handleSecurityAlert = (e) => {
     e.preventDefault();   
     console.log("issue security alert");
-    sendEmail(
-      alertaSeguridad.nombre,
-      alertaSeguridad.email, 
-      alertaSeguridad.mensaje,
-      'template_securityAlert'
-    );
+    sendEmail(alertaSeguridad,'template_securityAlert');
   }
 
   const handleHealthAlert = (e) => {
     e.preventDefault();    
     console.log("issue health alert")
-    sendEmail(
-      alertaSalud.nombre,
-      alertaSalud.email, 
-      alertaSalud.mensaje,
-      'template_healthAlert'
-    );
+    sendEmail(alertaSalud,'template_healthAlert');
 }
 
-  function sendEmail(nombre, email, mensaje, template) {
+  function sendEmail(alerta, template) {
 
     const templateParams = {
       name: "mi contacto - name",
-      recipient: email,
-      to_email: email,
-      to_name: nombre,
-      from_name: "<usuario logueado>", //todo: colocar nombre + apellido de usuario logueado
-      message: mensaje 
+      recipient: alerta.email,
+      to_email: alerta.email,
+      to_name: alerta.nombreDesde,
+      from_name: alerta.nombrePara,
+      message: alerta.mensaje
     }
     emailjs.send('service_safeMe', template, templateParams)
       .then((result) => {

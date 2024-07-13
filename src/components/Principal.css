@@ -11,4 +11,5 @@
   border: 1px solid red;
   margin-top: var(--spacing-36);
   margin-bottom: var(--spacing-36);
+  cursor: pointer;
 }
