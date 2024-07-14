@@ -9,3 +9,6 @@ Cuando se activa la alerta, se envía al contacto el mensaje asociado y la geore
 
 # Variables de entorno
 APP_PORT = puerto donde levanta la aplicación
+
+Agregue el deploy de movies a gh-pages
+https://tomi2107.github.io/movies-React/
